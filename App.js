@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform, Image } from 'react-native';
+import { StyleSheet, Text, View, Platform, Image, Dimensions } from 'react-native';
 import { Images, Profiles } from './App/Themes';
 
 export default class App extends React.Component {
@@ -25,24 +25,44 @@ export default class App extends React.Component {
         </View>
 
         <View style={styles.profile}>
-          <Image style={styles.profileimg} source={Images.harold}/>
-          <Text style={styles.name}>name, age</Text>
-          <Text style={styles.desc}>occupation</Text>
+          <View style={styles.img}>
+            <Image style={styles.profileimg} source={Images.harold}/>
+          </View>
+          <View style={styles.imgcaption}>
+            <Text style={styles.name}><Text style={{fontWeight: "bold"}}>Harold</Text>, 65</Text>
+            <Text style={styles.desc}>Internet meme</Text>
+          </View>
         </View>
 
         <View style={styles.icons}>
-          <View style={styles.button1}>
-            <Image style={styles.oneimg} source={Images.rewind}/>
+
+          <View style={styles.back1}>
+            <Image style={styles.button1} source={Images.rewind}/>
           </View>
-          <Image style={styles.button2} source={Images.nope}/>
-          <Image style={styles.button3} source={Images.boost}/>
-          <Image style={styles.button4} source={Images.like}/>
-          <Image style={styles.button5} source={Images.superLike}/>
+
+          <View style={styles.back2}>
+            <Image style={styles.button2} source={Images.nope}/>
+          </View>
+
+          <View style={styles.back1}>
+          <Image style={styles.button1} source={Images.boost}/>
+          </View>
+
+          <View style={styles.back2}>
+          <Image style={styles.button2} source={Images.like}/>
+          </View>
+
+          <View style={styles.back1}>
+          <Image style={styles.button1} source={Images.superLike}/>
+          </View>
+
         </View>
       </View>
     );
   }
 }
+
+var { height, width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -54,7 +74,7 @@ const styles = StyleSheet.create({
   },
   navbar: {
     flex: 1,
-    height: (Platform.OS === 'ios') ? 44 + 18 : 56 + 30,
+    height: (Platform.OS === 'ios') ? 50 + 25 : 50 + 30,
     borderBottomWidth: 3,
     borderColor: '#C5C5C5',
     top: 0,
@@ -67,71 +87,95 @@ const styles = StyleSheet.create({
   },
   logoimg: {
     flex: 4,
-    height: (Platform.OS === 'ios') ? 30 : 45,
+    height: (Platform.OS === 'ios') ? 35 : 40,
     resizeMode: 'contain',
     marginBottom: 10,
   },
   chatimg: {
     flex: 1,
-    height: (Platform.OS === 'ios') ? 25 : 35,
+    height: (Platform.OS === 'ios') ? 40 : 35,
     resizeMode: 'contain',
     marginBottom: 5,
     tintColor: '#C5C5C5',
   },
   setimg: {
     flex: 1,
-    height: (Platform.OS === 'ios') ? 20 : 30,
+    height: (Platform.OS === 'ios') ? 35 : 30,
     resizeMode: 'contain',
     marginBottom: 10,
     tintColor: '#C5C5C5',
   },
   profile: {
-    flex: 2,
-    marginTop: 100,
+    flex: 1,
+    width: '90%',
+    marginTop: 130,
+  },
+  profileimg: {
+    backgroundColor: '#000000',
+    resizeMode: 'contain',
+    width: '100%',
+    height: undefined,
+    aspectRatio: 1/1,
+  },
+  img: {
+    borderWidth: 2,
+    borderBottomWidth: 0,
+    borderColor: '#C5C5C5',
+  },
+  imgcaption: {
+    paddingLeft: 15,
+    paddingBottom: 8,
+    paddingTop: 5,
+    borderWidth: 2,
+    borderTopWidth: 0,
+    borderColor: '#C5C5C5',
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    backgroundColor: '#ffffff',
+  },
+  name: {
+    fontSize: 24,
+    marginBottom: -2
+  },
+  desc: {
+    fontSize: 16,
+    color: '#C5C5C5',
+    marginTop: 0
   },
   icons: {
     flex: 0.5,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    bottom: 15,
+    position: 'absolute'
+  },
+  back1: {
+    backgroundColor: '#ffffff',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: width / 7,
+    marginRight: width / 7,
+  },
+  back2: {
+    backgroundColor: '#ffffff',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   button1: {
-    flex: 1,
-    height: (Platform.OS === 'ios') ? 10 : 30,
-    width: 30,
-    borderColor: '#ff0000',
-    borderWidth: 3,
-    marginBottom: 10,
-  },
-  oneimg: {
-    backgroundColor: '#ffffff',
-    height: (Platform.OS === 'ios') ? 10 : 30,
-    width: 30,
-    padding: 30,
+    flex: .55,
+    height: (Platform.OS === 'ios') ? 30 : 30,
     resizeMode: 'contain',
   },
   button2: {
-    flex: 1.5,
-    height: (Platform.OS === 'ios') ? 10 : 40,
+    flex: .5,
+    height: (Platform.OS === 'ios') ? 40 : 40,
     resizeMode: 'contain',
-    marginBottom: 10,
   },
-  button3: {
-    flex: 1,
-    height: (Platform.OS === 'ios') ? 10 : 30,
-    resizeMode: 'contain',
-    marginBottom: 10,
-  },
-  button4: {
-    flex: 1,
-    height: (Platform.OS === 'ios') ? 10 : 40,
-    resizeMode: 'contain',
-    marginBottom: 10,
-  },
-  button5: {
-    flex: 1,
-    height: (Platform.OS === 'ios') ? 10 : 30,
-    resizeMode: 'contain',
-    marginBottom: 10,
-  }
 });
