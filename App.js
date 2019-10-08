@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Platform, Image, Dimensions, SafeAreaView } from 'react-native';
 import { Images, Profiles } from './App/Themes';
 
 export default class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     var haroldProfile = Profiles.harold;
     this.state = {
@@ -13,11 +13,15 @@ export default class App extends React.Component {
       age: haroldProfile.age,
       occupation: haroldProfile.occupation
     };
+    this.updateState = () => {
+      this.setState({ name: haroldProfile.age });
+    };
+
   }
 
   render() {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.navbar}>
             <Image style={styles.setimg} source={Images.set}/>
             <Image style={styles.logoimg} source={Images.logo}/>
@@ -26,11 +30,11 @@ export default class App extends React.Component {
 
         <View style={styles.profile}>
           <View style={styles.img}>
-            <Image style={styles.profileimg} source={Images.harold}/>
+            <Image style={styles.profileimg} source={this.state.profileImage}/>
           </View>
           <View style={styles.imgcaption}>
-            <Text style={styles.name}><Text style={{fontWeight: "bold"}}>Harold</Text>, 65</Text>
-            <Text style={styles.desc}>Internet meme</Text>
+            <Text style={styles.name}><Text style={{fontWeight: "bold"}}>{this.state.name}</Text>, {this.state.age}</Text>
+            <Text style={styles.desc}>{this.state.occupation}</Text>
           </View>
         </View>
 
@@ -57,7 +61,7 @@ export default class App extends React.Component {
           </View>
 
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -75,7 +79,7 @@ const styles = StyleSheet.create({
   navbar: {
     flex: 1,
     height: (Platform.OS === 'ios') ? 50 + 25 : 50 + 30,
-    borderBottomWidth: 3,
+    borderBottomWidth: 2,
     borderColor: '#C5C5C5',
     top: 0,
     left: 0,
