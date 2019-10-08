@@ -1,67 +1,130 @@
 import React from 'react';
-import { StyleSheet, Text, View, Platform, Image, Dimensions, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Platform, Image, Dimensions, SafeAreaView, Button, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Images, Profiles } from './App/Themes';
+import Tinder from './App/Components/Tinder'
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
 
-    var haroldProfile = Profiles.harold;
+    var num = 0;
+    const profList = [
+      Profiles.harold,
+      Profiles.barbara,
+      Profiles.james,
+      Profiles.john,
+      Profiles.linda,
+      Profiles.liz,
+      Profiles.mary,
+      Profiles.michael,
+      Profiles.patricia,
+      Profiles.robert,
+    ]
+    // default state
     this.state = {
-      profileImage: haroldProfile.image,
-      name: haroldProfile.name,
-      age: haroldProfile.age,
-      occupation: haroldProfile.occupation
-    };
-    this.updateState = () => {
-      this.setState({ name: haroldProfile.age });
-    };
+      prof: {
+        profileImage: profList[0].image,
+        name: profList[0].name,
+        age: profList[0].age,
+        occupation: profList[0].occupation
+      },
+      loading: false,
+    }
+
+    this.next = () => {
+      this.setState({loading: true});
+
+      num = num + 1
+      if(num > 9) {
+        num = 0
+      }
+      var resultProfile = profList[num];
+      this.setState({
+        prof: {
+          profileImage: resultProfile.image,
+          name: resultProfile.name,
+          age: resultProfile.age,
+          occupation: resultProfile.occupation
+        },
+        loading: false
+      })
+    }
+
+    this.previous = () => {
+      this.setState({loading: true});
+
+      num = num - 1
+      if(num < 0) {
+        num = 9
+      }
+      var resultProfile = profList[num];
+      this.setState({
+        prof: {
+          profileImage: resultProfile.image,
+          name: resultProfile.name,
+          age: resultProfile.age,
+          occupation: resultProfile.occupation
+        },
+        loading: false
+      })
+    }
+
+    this.boost = () => {
+      this.setState({loading: true});
+      var tempProf = profList[num];
+      var newList = profList.slice(0, num).concat(profList.slice(num + 1, profList.length));
+      newList = newList.concat(tempProf);
+      profList = newList;
+    }
+
+    this.superLike = () => {
+
+    }
 
   }
 
   render() {
+    if(this.state.loading) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator />
+        </View>
+      );
+    }
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.navbar}>
-            <Image style={styles.setimg} source={Images.set}/>
-            <Image style={styles.logoimg} source={Images.logo}/>
-            <Image style={styles.chatimg} source={Images.chat}/>
-        </View>
-
-        <View style={styles.profile}>
-          <View style={styles.img}>
-            <Image style={styles.profileimg} source={this.state.profileImage}/>
-          </View>
-          <View style={styles.imgcaption}>
-            <Text style={styles.name}><Text style={{fontWeight: "bold"}}>{this.state.name}</Text>, {this.state.age}</Text>
-            <Text style={styles.desc}>{this.state.occupation}</Text>
-          </View>
-        </View>
+      <View style={styles.container}>
+        <Tinder prof={this.state.prof} />
 
         <View style={styles.icons}>
 
-          <View style={styles.back1}>
-            <Image style={styles.button1} source={Images.rewind}/>
-          </View>
+          <TouchableOpacity onPress={this.previous}>
+            <View style={styles.back1}>
+              <Image style={styles.button1} source={Images.rewind}/>
+            </View>
+          </TouchableOpacity>
 
-          <View style={styles.back2}>
-            <Image style={styles.button2} source={Images.nope}/>
-          </View>
-
-          <View style={styles.back1}>
-          <Image style={styles.button1} source={Images.boost}/>
-          </View>
-
-          <View style={styles.back2}>
-          <Image style={styles.button2} source={Images.like}/>
-          </View>
+          <TouchableOpacity onPress={this.next}>
+            <View style={styles.back2}>
+              <Image style={styles.button2} source={Images.nope}/>
+            </View>
+          </TouchableOpacity>
 
           <View style={styles.back1}>
-          <Image style={styles.button1} source={Images.superLike}/>
+            <Image style={styles.button1} source={Images.boost}/>
+          </View>
+
+          <TouchableOpacity onPress={this.next}>
+            <View style={styles.back2}>
+              <Image style={styles.button2} source={Images.like}/>
+            </View>
+          </TouchableOpacity>
+
+          <View style={styles.back1}>
+            <Image style={styles.button1} source={Images.superLike}/>
           </View>
 
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 }
@@ -71,80 +134,6 @@ var { height, width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#F0F0F0',
-  },
-  navbar: {
-    flex: 1,
-    height: (Platform.OS === 'ios') ? 50 + 25 : 50 + 30,
-    borderBottomWidth: 2,
-    borderColor: '#C5C5C5',
-    top: 0,
-    left: 0,
-    position: 'absolute',
-    width: '100%',
-    alignItems: 'flex-end',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  logoimg: {
-    flex: 4,
-    height: (Platform.OS === 'ios') ? 35 : 40,
-    resizeMode: 'contain',
-    marginBottom: 10,
-  },
-  chatimg: {
-    flex: 1,
-    height: (Platform.OS === 'ios') ? 40 : 35,
-    resizeMode: 'contain',
-    marginBottom: 5,
-    tintColor: '#C5C5C5',
-  },
-  setimg: {
-    flex: 1,
-    height: (Platform.OS === 'ios') ? 35 : 30,
-    resizeMode: 'contain',
-    marginBottom: 10,
-    tintColor: '#C5C5C5',
-  },
-  profile: {
-    flex: 1,
-    width: '90%',
-    marginTop: 130,
-  },
-  profileimg: {
-    backgroundColor: '#000000',
-    resizeMode: 'contain',
-    width: '100%',
-    height: undefined,
-    aspectRatio: 1/1,
-  },
-  img: {
-    borderWidth: 2,
-    borderBottomWidth: 0,
-    borderColor: '#C5C5C5',
-  },
-  imgcaption: {
-    paddingLeft: 15,
-    paddingBottom: 8,
-    paddingTop: 5,
-    borderWidth: 2,
-    borderTopWidth: 0,
-    borderColor: '#C5C5C5',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    backgroundColor: '#ffffff',
-  },
-  name: {
-    fontSize: 24,
-    marginBottom: -2
-  },
-  desc: {
-    fontSize: 16,
-    color: '#C5C5C5',
-    marginTop: 0
   },
   icons: {
     flex: 0.5,
